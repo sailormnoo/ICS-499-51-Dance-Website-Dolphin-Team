@@ -5,8 +5,8 @@
     $password = '';
     $database = 'brazil_dances';
 
-    $conn = new mysqli($host, $username, $password, $database, $port);
+$conn = new mysqli($host, $username, $password, $database, $port);
 
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
