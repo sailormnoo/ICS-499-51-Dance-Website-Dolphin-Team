@@ -1,39 +1,38 @@
 import Groq from "groq-sdk";
-import readline from "readline";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+dotenv.config({ path: "../../.env" });
+
+const app = express();
+app.use(express.json());
+app.use(cors());
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const messages = [];
+app.post("/chat", async (req, res) => {
+  const userMessage = req.body.message;
 
-function chatLoop() {
-  rl.question("You: ", async (input) => {
-    if (input.toLowerCase() === "exit") {
-      rl.close();
-      return;
-    }
+  if (!userMessage) {
+    return res.status(400).json({ error: "Message is required" });
+  }
 
-    messages.push({ role: "user", content: input });
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: userMessage }],
+      model: "llama-3.3-70b-versatile",
+    });
 
-    try {
-      const chatCompletion = await groq.chat.completions.create({
-        messages,
-        model: "llama-3.3-70b-versatile",
-      });
+    const aiResponse = chatCompletion.choices[0]?.message?.content || "No response.";
+    res.json({ response: aiResponse });
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
-      const reply = chatCompletion.choices[0]?.message?.content || "No response.";
-      console.log("AI:", reply);
-
-      messages.push({ role: "assistant", content: reply });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    chatLoop();
-  });
-}
-
-chatLoop();
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Chatbot server running on http://localhost:${PORT}`);
+});
