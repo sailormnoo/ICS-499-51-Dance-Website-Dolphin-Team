@@ -13,16 +13,19 @@ $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : 
 
 $sql = "
     SELECT 
-        dances.dance_name,
-        dances.description,
-        dances.region,
-        media.media_url,
-        media.alttext,
+        dances.dance_name, 
+        dances.description, 
+        region.region_name, 
+        media.media_url, 
+        media.alttext, 
         dance_categories.category_name
     FROM dances
     LEFT JOIN media ON dances.media_id = media.media_id
     LEFT JOIN dance_categories ON dances.category_id = dance_categories.category_id
+    LEFT JOIN region ON dances.region = region.region_key
     WHERE dances.dance_name LIKE '%$search%'
+       OR region.region_name LIKE '%$search%'
+       OR dance_categories.category_name LIKE '%$search%'
 ";
 
 $result = $conn->query($sql);
@@ -33,7 +36,7 @@ if ($result && $result->num_rows > 0) {
     $dances[] = [
       "dance_name" => $row['dance_name'] ?? 'Unknown',
       "description" => $row['description'] ?? 'No description available',
-      "region" => $row['region'] ?? 'Unknown',
+      "region" => $row['region_name'] ?? 'Unknown',
       "media_url" => $row['media_url'] ?? '',
       "alttext" => $row['alttext'] ?? 'Dance image',
       "category" => $row['category_name'] ?? 'Uncategorized'

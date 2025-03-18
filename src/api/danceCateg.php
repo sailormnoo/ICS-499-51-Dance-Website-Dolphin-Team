@@ -1,3 +1,32 @@
+<?php
+session_start();
+
+$user_type=" ";
+
+if(isset($_SESSION["admin_name"])){
+   $user_type="admin";
+}
+
+else if(isset($_SESSION["user_name"])){
+  $user_type="user";
+}
+else{
+  $user_type="guest";
+}
+
+$toolBar=" "
+if($user_type=="admin"){
+  $toolBar="adminhome.php";
+}
+else if($user_type=="user"){
+  $toolBar="userhome.php";
+}
+else if($user_type=="guest"){
+  $toolBar="toolbar.html";
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -14,47 +43,22 @@
   </head>
 
   <body>
-    <div class="toolBar" style="background-color: lightblue;">
-      <!-- tool bar -->
-      <header class="p-3" style="background-color: lightblue;">
-        <div class="container">
-          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-              <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                <use xlink:href="#bootstrap"></use>
-              </svg>
-            </a>
 
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a href="index.html" class="nav-link px-2" style="color: darkgreen;">Home</a></li>
-              <li><a href="danceCatagories.html" class="nav-link px-2 text-white">Catagories</a></li>
-              <li><a href="regions.html" class="nav-link px-2" style="color: darkgreen;">Regions</a></li>
-              
-            </ul>
+    <header>
+      <div id="toolbar-placeholder">
+        <?php include($toolBar); ?>
+      </div>
+    </header>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-              <input type="search" class="form-control" style="color: darkgreen" style="background-color: lightblue;"
-                placeholder="Search..." aria-label="Search">
-            </form>
-            <div class="text-end">
-              <button type="button" class="btn btn-outline-light me-2">Login</button>
-              <button type="button" class="btn"
-                style="background-color: lightgreen; color: darkgreen; border-color: darkgreen;">Sign-up</button>
-              <button type="button" class="btn btn-outline-light me-2">Settings</button>
-            </div>
-          </div>
-        </div>
-      </header>
-    </div>
     <section class="one">
       <div class="background">
         <div class="scrollContainer">
-          <img src="assets/images/brazil_flag.jpg" alt="Brazil Flag" class="flag">
+          <img src="../../public/assets/images/brazil_flag.jpg" alt="Brazil Flag" class="flag">
           <h1>Catagories</h1>
           <div class="danceContainer" id="danceContainer">
             <div class="Catagories">
-              <div class="Catagorie" onclick="window.location.href='Classic.html'">
-                <h2>Classic</h2>
+              <div class="Catagorie" onclick="window.location.href='Traditional.html'">
+                <h2>Traditional</h2>
               </div>
               <div class="Catagorie">
                 <h2>Ballroom</h2>
@@ -84,8 +88,8 @@
                   <a href="#!" class="nav-link">
                     <div class="position-relative"
                       style="width:40px; height: 40px; border-radius: 50% ; border: 2px solid #e84118; padding: 2px;">
-                      <img src="assets/images/chatbox_face.jpg" class="img-fluid" alt=""
-                        style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                      <img src="../../public/assets/images/chatbox_face.jpg" class="img-fluid" alt=""
+                           style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                       <span
                         class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
                         <span class="visually-hidden">New alerts</span>
@@ -109,8 +113,8 @@
           <div class="card-body p-4" style="height: 250px; overflow: auto;">
             <div class="d-flex align-items-baseline mb-4">
               <div class="position-relative avatar">
-                <img src="assets/images/chatbox_face.jpg" class="img-fluid" alt=""
-                  style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                <img src="../../public/assets/images/chatbox_face.jpg" class="img-fluid" alt=""
+                     style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
                 <span
                   class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
                   <span class="visually-hidden">New alerts</span>
@@ -138,9 +142,5 @@
     </div>
 
   </body>
-
-</html>
-
-</body>
 
 </html>

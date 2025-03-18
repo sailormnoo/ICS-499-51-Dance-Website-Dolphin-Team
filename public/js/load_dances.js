@@ -1,18 +1,33 @@
-function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/&/g, "&amp;")
+function escapeHtml(text) {
+    if (typeof text !== 'string') return text;
+    return text
+        .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    fetch("../src/api/fetch_dances.php")
+function loadDances(region = null, category = null) {
+    const danceContainer = document.getElementById("danceContainer");
+    danceContainer.innerHTML = "<p>Loading dances...</p>"; // Show loading message
+
+    // Prepare request body
+    const requestBody = JSON.stringify({ region, category });
+
+    console.log("Fetching dances with request body:", requestBody); // Debugging log
+
+    fetch("../src/api/fetch_dances.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: requestBody
+    })
         .then(response => response.json())
         .then(data => {
-            const danceContainer = document.getElementById("danceContainer");
-            danceContainer.innerHTML = ""; // Clear existing content
+            console.log("Received response:", data); // Debugging log
+            danceContainer.innerHTML = ""; // Clear previous content
 
             if (data.length) {
                 data.forEach(dance => {
@@ -33,22 +48,22 @@ document.addEventListener("DOMContentLoaded", function() {
                         : "<p class='danceCategory'><strong>Category:</strong> Uncategorized</p>";
 
                     let danceCard = `
-                        <div class="dance">
-                            <h3 class="danceName">${escapeHtml(dance.dance_name)}</h3>
-                            ${imageHtml}
-                            ${descriptionHtml}
-                            ${regionHtml}
-                            ${categoryHtml}
-                        </div>
-                    `;
+                    <div class="dance">
+                        <h3 class="danceName">${escapeHtml(dance.dance_name)}</h3>
+                        ${imageHtml}
+                        ${descriptionHtml}
+                        ${regionHtml}
+                        ${categoryHtml}
+                    </div>
+                `;
                     danceContainer.insertAdjacentHTML("beforeend", danceCard);
                 });
             } else {
                 danceContainer.innerHTML = "<p>No dances found.</p>";
             }
         })
-        .catch(() => {
-            document.getElementById("danceContainer").innerHTML = "<p>Error loading data.</p>";
+        .catch(error => {
+            console.error("Error fetching dances:", error);
+            danceContainer.innerHTML = "<p>Error loading data.</p>";
         });
-});
-
+}

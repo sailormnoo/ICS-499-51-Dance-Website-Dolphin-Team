@@ -59,64 +59,83 @@
   <div id="danceContainer"></div>
 
   <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const query = getQueryParam("q");
+      if (query) {
+        document.getElementById("searchInput").value = query;
+        searchDance(); // Auto-search when page loads with a query
+      }
+    });
+
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
     function escapeHtml(str) {
       if (!str) return "";
       return str.replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#039;");
     }
 
     function searchDance() {
       const query = document.getElementById("searchInput").value.trim();
+      if (!query) {
+        document.getElementById("danceContainer").innerHTML = "<p>Please enter a search term.</p>";
+        return;
+      }
+
       fetch("../src/api/dance_search.php?search=" + encodeURIComponent(query))
-        .then(response => response.json())
-        .then(data => {
-          const danceContainer = document.getElementById("danceContainer");
-          danceContainer.innerHTML = ""; // Clear existing content
+              .then(response => response.json())
+              .then(data => {
+                const danceContainer = document.getElementById("danceContainer");
+                danceContainer.innerHTML = ""; // Clear existing content
 
-          if (data && data.length) {
-            data.forEach(dance => {
-              const imageHtml = dance.media_url
-                ? `<img src="${escapeHtml(dance.media_url)}" alt="${escapeHtml(dance.alttext)}">`
-                : "<p>No Image Available</p>";
+                if (data && data.length) {
+                  data.forEach(dance => {
+                    const imageHtml = dance.media_url
+                            ? `<img src="${escapeHtml(dance.media_url)}" alt="${escapeHtml(dance.alttext)}">`
+                            : "<p>No Image Available</p>";
 
-              const descriptionHtml = dance.description
-                ? `<p class="danceDescription">${escapeHtml(dance.description)}</p>`
-                : "<p class='danceDescription'>No description available</p>";
+                    const descriptionHtml = dance.description
+                            ? `<p class="danceDescription">${escapeHtml(dance.description)}</p>`
+                            : "<p class='danceDescription'>No description available</p>";
 
-              const regionHtml = dance.region
-                ? `<p class="danceRegion"><strong>Region:</strong> ${escapeHtml(dance.region)}</p>`
-                : "<p class='danceRegion'><strong>Region:</strong> Unknown</p>";
+                    const regionHtml = dance.region
+                            ? `<p class="danceRegion"><strong>Region:</strong> ${escapeHtml(dance.region)}</p>`
+                            : "<p class='danceRegion'><strong>Region:</strong> Unknown</p>";
 
-              const categoryHtml = dance.category
-                ? `<p class="danceCategory"><strong>Category:</strong> ${escapeHtml(dance.category)}</p>`
-                : "<p class='danceCategory'><strong>Category:</strong> Uncategorized</p>";
+                    const categoryHtml = dance.category
+                            ? `<p class="danceCategory"><strong>Category:</strong> ${escapeHtml(dance.category)}</p>`
+                            : "<p class='danceCategory'><strong>Category:</strong> Uncategorized</p>";
 
-              const danceCard = `
-                <div class="dance">
-                  <h3 class="danceName">${escapeHtml(dance.dance_name)}</h3>
-                  ${imageHtml}
-                  ${descriptionHtml}
-                  ${regionHtml}
-                  ${categoryHtml}
-                </div>
-              `;
-              danceContainer.insertAdjacentHTML("beforeend", danceCard);
-            });
-          } else {
-            danceContainer.innerHTML = "<p>No dances found.</p>";
-          }
-        })
-        .catch(() => {
-          document.getElementById("danceContainer").innerHTML = "<p>Error loading data.</p>";
-        });
+                    const danceCard = `
+            <div class="dance">
+              <h3 class="danceName">${escapeHtml(dance.dance_name)}</h3>
+              ${imageHtml}
+              ${descriptionHtml}
+              ${regionHtml}
+              ${categoryHtml}
+            </div>
+          `;
+                    danceContainer.insertAdjacentHTML("beforeend", danceCard);
+                  });
+                } else {
+                  danceContainer.innerHTML = "<p>No dances found.</p>";
+                }
+              })
+              .catch(() => {
+                document.getElementById("danceContainer").innerHTML = "<p>Error loading data.</p>";
+              });
     }
 
     function goBack() {
       window.history.back();
     }
+
   </script>
 </body>
 

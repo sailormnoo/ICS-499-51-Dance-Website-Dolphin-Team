@@ -1,0 +1,72 @@
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../public/css/Chatbox.css">
+</head>
+<body>
+<div class="fixed-state">
+  <div class="container mt-4">
+    <!-- Note the additional "minimized" class -->
+    <div class="card mx-auto minimized" style="max-width:400px">
+      <!-- Header (clickable to toggle chat) -->
+      <div class="card-header bg-transparent" style="padding: 10px; width: 400px">
+        <div class="navbar navbar-expanded p-0">
+          <ul class="navbar-nav me-auto align-items-center">
+            <li class="nav-item d-flex align-items-center">
+              <a href="#!" class="nav-link" id="toggleChat">
+                <div class="position-relative" style="width:40px; height: 40px; border-radius: 50%; border: 2px solid #e84118; padding: 2px;">
+                  <img src="../public/assets/images/chatbox_face.jpg" class="img-fluid" alt=""
+                       style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                  <span class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                        <span class="visually-hidden">New alerts</span>
+                      </span>
+                </div>
+                <span class="ms-2">Ask Me!</span>
+              </a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="#!" class="nav-link d-flex align-items-center" id="toggleChatControl">
+                <!-- Initially show the maximize icon -->
+                <i class="fas fa-window-maximize me-2" id="toggleChatIcon"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Message Area (initially hidden) -->
+      <div class="card-body p-4 d-none" style="height: 250px; overflow: auto;">
+        <div class="d-flex align-items-baseline mb-4">
+          <div class="position-relative avatar">
+            <img src="../public/assets/images/chatbox_face.jpg" class="img-fluid" alt=""
+                 style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+            <span class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                  <span class="visually-hidden">New alerts</span>
+                </span>
+          </div>
+          <div class="pe-2">
+            <div>
+              <div class="card d-inline-block p-2 px-3 m-1">Welcome, What Do You Wanna Learn?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area (initially hidden) -->
+      <div class="input-area d-none">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Type a message...">
+          <button class="btn btn-primary" type="button">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
