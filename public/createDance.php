@@ -1,3 +1,15 @@
+<?php
+// Start the session to check if the user is logged in
+session_start();
+
+// Check if the user is logged in and is either an admin or a user
+if (!isset($_SESSION['user_name']) && !isset($_SESSION['admin_name'])) {
+  header('Location: login.php');
+  exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,6 +19,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="css/Home.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <style>
     .background {
@@ -31,12 +44,12 @@
         <img src="assets/images/brazil_flag.jpg" alt="Brazil Flag" class="flag">
         <h1>Create A Dance</h1>
         <div class="card-body" style="max-width: 500px; margin: 0 auto; text-align: left;">
-          
+
           <div class="mb-3">
             <label for="danceName" class="form-label">Dance Name</label>
             <input type="text" class="form-control" id="danceName" required>
           </div>
-          
+
           <div class="mb-3">
             <label for="danceCategory" class="form-label">Category</label>
             <select class="form-select" id="danceCategory" required>
@@ -72,22 +85,22 @@
           <button class="btn btn-primary" type="button" onclick="createDance()">Create Dance</button>
 
           <div id="feedback" style="margin-top: 1rem; font-weight: bold;"></div>
-        </div> 
-      </div> 
-    </div> 
+        </div>
+      </div>
+    </div>
   </section>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      fetch("html/toolbar.html")
+      fetch("html/toolbar.php")
         .then(response => response.text())
         .then(data => document.getElementById("toolbar-container").innerHTML = data);
     });
 
     function createDance() {
-      const feedbackDiv      = document.getElementById('feedback');
-      const danceName       = document.getElementById('danceName').value.trim();
-      const categoryId      = document.getElementById('danceCategory').value;
-      let region          = document.getElementById('danceRegion').value;
+      const feedbackDiv = document.getElementById('feedback');
+      const danceName = document.getElementById('danceName').value.trim();
+      const categoryId = document.getElementById('danceCategory').value;
+      let region = document.getElementById('danceRegion').value;
       if (region == "Rio de Janeiro") {
         region = 1;
       } else if (region == "Northeastern Brazil") {
@@ -97,8 +110,8 @@
       } else if (region == "Bahia") {
         region = 4;
       }
-      const description     = document.getElementById('danceDescription').value.trim();
-      const danceImageFile  = document.getElementById('danceImage').files[0];
+      const description = document.getElementById('danceDescription').value.trim();
+      const danceImageFile = document.getElementById('danceImage').files[0];
 
       feedbackDiv.textContent = 'Submitting...';
 
@@ -112,17 +125,19 @@
       }
 
       fetch('../src/api/create_dance.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.text())
-      .then(result => {
-        feedbackDiv.textContent = result; 
-      })
-      .catch(err => {
-        feedbackDiv.textContent = 'Error creating dance: ' + err;
-      });
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+          feedbackDiv.textContent = result;
+        })
+        .catch(err => {
+          feedbackDiv.textContent = 'Error creating dance: ' + err;
+        });
     }
   </script>
+
 </body>
+
 </html>

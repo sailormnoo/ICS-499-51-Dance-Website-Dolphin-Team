@@ -15,10 +15,11 @@ app.post("/chat", async (req, res) => {
   const userMessage = req.body.message;
   const systemMessage = {
     role: "system",
-    content: "You are an expert on Brazilian Dances. Only answer questions related to Brazilian Dances and politely decline any off-topic queries.\n" +
-        "Do not use markdown or any other formatting.\n" +
-        "Do not ask follow up questions.\n" +
-        "Keep answers short and concise.\n"
+    content:
+      "You are an expert on Brazilian Dances. Only answer questions related to Brazilian Dances and politely decline any off-topic queries.\n" +
+      "Do not use markdown or any other formatting.\n" +
+      "Do not ask follow up questions.\n" +
+      "Keep answers short and concise.\n",
   };
   if (!userMessage) {
     return res.status(400).json({ error: "Message is required" });
@@ -30,7 +31,8 @@ app.post("/chat", async (req, res) => {
       model: "llama-3.3-70b-versatile",
     });
 
-    const aiResponse = chatCompletion.choices[0]?.message?.content || "No response.";
+    const aiResponse =
+      chatCompletion.choices[0]?.message?.content || "No response.";
     res.json({ response: aiResponse });
   } catch (error) {
     console.error("Error:", error);

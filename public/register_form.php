@@ -47,29 +47,29 @@ if (isset($_POST['submit'])) {
 
 <body>
 
-<div class="form-container">
+  <div class="form-container">
 
-  <form action="" method="post">
-    <h3>register now</h3>
-    <?php
-    if (isset($error)) {
-      foreach ($error as $error) {
-        echo '<span class="error-msg">' . $error . '</span>';
+    <form action="" method="post">
+      <h3>register now</h3>
+      <?php
+      if (isset($error)) {
+        foreach ($error as $error) {
+          echo '<span class="error-msg">' . $error . '</span>';
+        };
       };
-    };
-    ?>
-    <input type="text" name="name" required placeholder="enter your name">
-    <input type="password" name="password" required placeholder="enter your password">
-    <input type="password" name="cpassword" required placeholder="confirm your password">
-    <select name="user_type">
-      <option value="user">user</option>
-      <option value="admin">admin</option>
-    </select>
-    <input type="submit" name="submit" value="register now" class="form-btn">
-    <p>already have an account? <a href="login.php">login now</a></p>
-  </form>
+      ?>
+      <input type="text" name="name" required placeholder="enter your name">
+      <input type="password" name="password" required placeholder="enter your password">
+      <input type="password" name="cpassword" required placeholder="confirm your password">
+      <select name="user_type">
+        <option value="user">user</option>
+        <option value="admin">admin</option>
+      </select>
+      <input type="submit" name="submit" value="register now" class="form-btn">
+      <p>already have an account? <a href="login.php">login now</a></p>
+    </form>
 
-</div>
+  </div>
 
 </body>
 

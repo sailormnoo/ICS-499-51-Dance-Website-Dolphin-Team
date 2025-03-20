@@ -6,5 +6,8 @@
     "javascript": "javascriptreact",
     "html": "html",
     "css": "css"
-  }
+  },
+  "cSpell.words": [
+    "Groq"
+  ]
 }

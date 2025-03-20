@@ -17,11 +17,13 @@ if (isset($_POST['submit'])) {
     if (mysqli_num_rows($result) > 0) {
 
         $row = mysqli_fetch_array($result);
+        $_SESSION['user_type'] = $row['user_type'];
+
 
         if ($row['user_type'] == 'admin') {
 
             $_SESSION['admin_name'] = $row['username'];
-            header('location:adminhome.php');
+            header('location:../src/api/adminhome.php');
         }
         if ($row['user_type'] == 'user') {
 
@@ -49,24 +51,24 @@ if (isset($_POST['submit'])) {
 
 <body>
 
-<div class="form-container">
+    <div class="form-container">
 
-    <form action="" method="post">
-        <h3>login now</h3>
-        <?php
-        if (isset($error)) {
-            foreach ($error as $error) {
-                echo '<span class="error-msg">' . $error . '</span>';
+        <form action="" method="post">
+            <h3>login now</h3>
+            <?php
+            if (isset($error)) {
+                foreach ($error as $error) {
+                    echo '<span class="error-msg">' . $error . '</span>';
+                };
             };
-        };
-        ?>
-        <input type="text" name="username" required placeholder="enter your username">
-        <input type="password" name="password" required placeholder="enter your password">
-        <input type="submit" name="submit" value="login now" class="form-btn">
-        <p>don't have an account? <a href="register_form.php">register now</a></p>
-    </form>
+            ?>
+            <input type="text" name="username" required placeholder="enter your username">
+            <input type="password" name="password" required placeholder="enter your password">
+            <input type="submit" name="submit" value="login now" class="form-btn">
+            <p>don't have an account? <a href="register_form.php">register now</a></p>
+        </form>
 
-</div>
+    </div>
 
 </body>
 

@@ -22,7 +22,7 @@ else if($user_type=="user"){
   $toolBar="userhome.php";
 }
 else if($user_type=="guest"){
-  $toolBar="toolbar.html";
+  $toolBar="toolbar.php";
 }
 
 ?>
