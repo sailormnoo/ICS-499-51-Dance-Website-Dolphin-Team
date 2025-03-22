@@ -11,12 +11,10 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
 <body>
-  <div id="toolbar-container"></div>
-
+<div id="toolbar-container"></div>
   <section class="one">
     <div class="background"> 
       <div class="scrollContainer">
@@ -48,6 +46,13 @@
               .catch(error => console.error('Error loading chatbox:', error));
       </script>
 
+      <script>
+          document.addEventListener("DOMContentLoaded", function() {
+              fetch("html/toolbar.php")
+                  .then(response => response.text())
+                  .then(data => document.getElementById("toolbar-container").innerHTML = data);
+          });
+      </script>
 
       <script src="../public/js/load_dances.js"></script>
       <script>
@@ -55,13 +60,7 @@
               loadDances("Rio de Janeiro", null);
           });
       </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      fetch("html/toolbar.php")
-              .then(response => response.text())
-              .then(data => document.getElementById("toolbar-container").innerHTML = data);
-    });
-  </script>
+
 
 </body>
 </html>
