@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Brazil Map</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+
+    .tooltip {
+      position: absolute;
+      padding: 6px 10px;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      font-size: 14px;
+      border-radius: 5px;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 9999;
+      display: none;
+      transition: opacity 0.1s ease;
+    }
+
+    .center-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: 50px;
+    }
+    body {
+      background: linear-gradient(to right, blue, green);
+      margin: 0;
+      padding: 0;
+    }
+    .bander {
+      color: white;
+      font-size: larger;
+    }
+    .card {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    /* Responsive image styling */
+    img {
+      max-width: 50%;
+      height: auto;
+    }
+    #svg-container svg path {
+      cursor: pointer;
+      transition: fill 0.2s;
+    }
+    #svg-container svg path:hover {
+      fill: orange;
+    }
+
+  </style>
+</head>
+<body>
+<div class="center-container">
+  <div class="bander">
+    <h1>Brazil Maps</h1>
+    <p>Click the red pins and find brazil dance from that region:</p>
+    <button onclick="location.href='index.html'" type="button">back</button>
+  </div>
+  <section class="map" id="svg-container"></section>
+  <div id="danceCard" class="card">
+    <h3 id="danceTitle">Dance Title</h3>
+    <p id="danceDescription">Description of the dance.</p>
+    <p id="danceImage">Image of the dance.</p>
+    <button class="close-btn" onclick="closeDanceCard()">Close</button>
+  </div>
+</div>
+
+<!-- Include jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Include jQuery Maphilight plugin -->
+<script src="https://github.com/kemayo/maphilight"></script>
+<!-- Module-based script integration for the Image Map Resizer -->
+<script src="https://unpkg.com/image-map-resizer@1.0.10/js/imageMapResizer.min.js"></script>
+<script>
+  fetch('assets/images/brazil-map.svg')
+          .then(response => response.text())
+          .then(svg => {
+            document.getElementById('svg-container').innerHTML = svg;
+
+            const tooltip = document.getElementById('tooltip');
+
+            function setupRegion(id, name, link) {
+              const region = document.getElementById(id);
+              if (!region) return;
+
+              region.addEventListener('mouseenter', (e) => {
+                tooltip.textContent = name;
+                tooltip.style.display = 'block';
+              });
+
+              region.addEventListener('mousemove', (e) => {
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY + 10) + 'px';
+              });
+
+              region.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+              });
+
+              region.addEventListener('click', () => {
+                window.location.href = link;
+              });
+            }
+
+            setupRegion('pernambuco', 'Pernambuco', 'pernambuco.html');
+            setupRegion('riodejanerio', 'Rio de Janeiro', 'rioDeJanerio.html');
+            setupRegion('bahia', 'Bahia', 'bahia.html');
+            setupRegion('northeasternbrazil', 'Northeastern Brazil', 'northeasternBrazil.html');
+          });
+
+</script>
+<div id="tooltip" class="tooltip"></div>
+</body>
+</html>
