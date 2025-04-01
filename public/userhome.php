@@ -61,11 +61,19 @@ if(!isset($_SESSION["user_name"]))
   </header>
 </div>
 
+<div class="container text-center mt-4">
+    <h1>THIS IS USER HOME PAGE</h1>
+    <h3>Welcome, <?php echo $_SESSION["username"]; ?>!</h3>
 
+    <!-- Feedback Button -->
+    <div class="mt-3">
+        <a href="feedback.php" class="btn btn-success btn-lg">Give Feedback</a>
+    </div>
 
-<h1>THIS IS USER HOME PAGE</h1><?php echo $_SESSION["user_name"] ?>
-
-<a href="logout.php">Logout</a>
+    <div class="mt-4">
+        <a href="logout.php" class="btn btn-danger">Logout</a>
+    </div>
+</div>
 
 </body>
 </html>
