@@ -44,9 +44,8 @@ position: sticky;
 top: 0;
 width: 100%;
 text-align: center;
-padding: 10px;
-padding-bottom: 10px;
-background-color: lightblue;
+  padding: 10px;
+  background-color: lightblue;
 color: darkgreen;
 }
 .danceContainer {

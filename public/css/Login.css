@@ -4,6 +4,13 @@
     padding: 0;
     box-sizing: border-box;
 }
+#toolbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* ensures it stays above other content */
+}
 
 
 /* Body styles for a full-height centered layout */
