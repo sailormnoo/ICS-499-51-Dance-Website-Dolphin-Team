@@ -1,178 +1,72 @@
 <?php
 session_start();
-if(!isset($_SESSION["admin_name"])) {
-    header("location:login.php");
+
+
+if(!isset($_SESSION["admin_name"]))
+{
+	header("location:login.php");
 }
+
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<title>Admin Page</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 <body>
-<!-- Toolbar -->
-<div id="toolbar-container"></div>
+	<div class="toolBar" style="background-color: lightblue;">
+      <!-- tool bar -->
+		<header class="p-3 mb-3 border-bottom">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+        </a>
 
-<h1>THIS IS ADMIN HOME PAGE</h1>
-<p><?php echo $_SESSION["admin_name"]; ?></p>
-<a href="logout.php">Logout</a>
+				<ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="index.html" class="nav-link px-2" style="color: darkgreen;">Home</a></li>
+          <li><a href="danceCategories.html" class="nav-link px-2 text-white">Catagories</a></li>
+          <li><a href="regions.html" class="nav-link px-2" style="color: darkgreen;">Regions</a></li>
+        </ul>
 
-<!-- Dance Approval Section -->
-<div class="container mt-4">
-    <h2>Approve or Delete Dances</h2>
-    <table class="table table-striped" id="dances-table">
-        <thead>
-        <tr>
-            <th scope="col">Select</th>
-            <th scope="col">Dance Name</th>
-            <th scope="col">Description</th>
-            <th scope="col">Category</th>
-            <th scope="col">Region</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Dynamic content loaded via JavaScript -->
-        </tbody>
-    </table>
-    <button id="approve-button" class="btn btn-success">Approve Selected</button>
-    <button id="delete-button" class="btn btn-danger">Delete Selected</button>
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        </form>
+
+        <div class="dropdown text-end">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
+						<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="White" class="bi bi-person-circle" viewBox="0 0 16 16">
+							<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+							<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+						</svg>
+						<?php echo $_SESSION["admin_name"] ?>
+          </a>
+          <ul class="dropdown-menu text-small" style="">
+						<li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Create</a></li>
+						<li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="logout.php">Sign out</a></li>
+          </ul>
+        </div>
+				
+      </div>
+    </div>
+  </header>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Load toolbar content
-        fetch("html/toolbar.php")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("toolbar-container").innerHTML = data;
-                // Reinitialize dropdowns for dynamically added content.
-                var dropdownElements = document.querySelectorAll('.dropdown-toggle');
-                dropdownElements.forEach(function(dropdownToggleEl) {
-                    new bootstrap.Dropdown(dropdownToggleEl);
-                });
-            });
 
-        // Function to load dances from fetch_dances.php.
-        function loadDances() {
-            fetch('../src/api/fetch_dances.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({approved: 2})
-            })
-                .then(response => response.json())
-                .then(data => {
-                    let tbody = document.querySelector('#dances-table tbody');
-                    tbody.innerHTML = ""; // Clear any previous content.
-                    data.forEach(dance => {
-                        let row = document.createElement('tr');
 
-                        // Checkbox cell.
-                        let checkboxCell = document.createElement('td');
-                        let checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.classList.add('dance-checkbox');
-                        checkbox.value = dance.dance_id;
-                        checkboxCell.appendChild(checkbox);
-                        row.appendChild(checkboxCell);
+<h1>THIS IS ADMIN HOME PAGE</h1><?php echo $_SESSION["admin_name"] ?>
 
-                        // Dance Name.
-                        let nameCell = document.createElement('td');
-                        nameCell.textContent = dance.dance_name;
-                        row.appendChild(nameCell);
+<a href="logout.php">Logout</a>
 
-                        // Description.
-                        let descCell = document.createElement('td');
-                        descCell.textContent = dance.description;
-                        row.appendChild(descCell);
-
-                        // Category.
-                        let categoryCell = document.createElement('td');
-                        categoryCell.textContent = dance.category;
-                        row.appendChild(categoryCell);
-
-                        // Region.
-                        let regionCell = document.createElement('td');
-                        regionCell.textContent = dance.region;
-                        row.appendChild(regionCell);
-
-                        tbody.appendChild(row);
-                    });
-                })
-                .catch(error => console.error('Error fetching dances:', error));
-        }
-
-        // Initial load.
-        loadDances();
-
-        // Helper to get selected dance IDs.
-        function getSelectedDanceIds() {
-            const checkboxes = document.querySelectorAll('.dance-checkbox');
-            let ids = [];
-            checkboxes.forEach(chk => {
-                if(chk.checked) {
-                    ids.push(chk.value);
-                }
-            });
-            return ids;
-        }
-
-        // Approve button event handler.
-        document.getElementById('approve-button').addEventListener('click', function() {
-            let selectedIds = getSelectedDanceIds();
-            if(selectedIds.length === 0) {
-                alert('Please select at least one dance to approve.');
-                return;
-            }
-            fetch('../src/api/approve_dance.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({danceIds: selectedIds})
-            })
-                .then(response => response.json())
-                .then(result => {
-                    alert(result.message || result.error);
-                    // Reload the list after action.
-                    loadDances();
-                })
-                .catch(error => console.error('Error approving dances:', error));
-        });
-
-        // Delete button event handler.
-        document.getElementById('delete-button').addEventListener('click', function() {
-            let selectedIds = getSelectedDanceIds();
-            if(selectedIds.length === 0) {
-                alert('Please select at least one dance to delete.');
-                return;
-            }
-            if(!confirm('Are you sure you want to delete the selected dances?')) {
-                return;
-            }
-            fetch('../src/api/disapprove_dance.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({danceIds: selectedIds})
-            })
-                .then(response => response.json())
-                .then(result => {
-                    alert(result.message || result.error);
-                    // Reload the list after action.
-                    loadDances();
-                })
-                .catch(error => console.error('Error deleting dances:', error));
-        });
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

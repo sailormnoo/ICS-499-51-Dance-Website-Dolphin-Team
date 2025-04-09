@@ -39,6 +39,7 @@ session_start();
                     <div class="text-end">
                         <button type="button" class="btn btn-outline-light me-2" onclick="window.location.href='login.php'">Login</button>
                         <button type="button" class="btn" style="background-color: lightgreen; color: darkgreen; border-color: darkgreen;" onclick="window.location.href='signup.php'">Sign-up</button>
+                        <button type="button" class="btn btn-outline-light me-2">Settings</button>
                     </div>
                 <?php else: ?>
                     <div class="dropdown text-end">
@@ -50,10 +51,7 @@ session_start();
                             <?php echo $_SESSION["admin_name"] ?? $_SESSION["user_name"]; ?>
                         </a>
                         <ul class="dropdown-menu text-small">
-                            <!-- The Profile link destination is set conditionally -->
-                            <li>
-                                <a class="dropdown-item" href="<?php echo isset($_SESSION['admin_name']) ? 'adminhome.php' : 'userhome.php'; ?>">Profile</a>
-                            </li>
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><a class="dropdown-item" href="#">Saved</a></li>
                             <li><a class="dropdown-item" href="#">Settings</a></li>
                             <li><hr class="dropdown-divider"></li>

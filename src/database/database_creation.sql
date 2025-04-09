@@ -54,10 +54,7 @@ CREATE TABLE IF NOT EXISTS dances (
     description TEXT,
     media_id INT,
     region VARCHAR(100),
-    x INT,
-    y INT,
     user_id INT,
-    approved BOOL,
     FOREIGN KEY (user_id) REFERENCES users_form(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES dance_categories(category_id) ON DELETE CASCADE,
     FOREIGN KEY (media_id) REFERENCES media(media_id) ON DELETE CASCADE
@@ -74,12 +71,12 @@ INSERT INTO region (region_name, region_key) VALUES
 ('Pernambuco', 3),
 ('Bahia', 4);
 
-INSERT INTO dances (dance_name, category_id, description, media_id, region, user_id, approved, x, y) VALUES
-('Samba', 1, 'A lively, rhythmical dance with origins in Afro-Brazilian communities, performed at the Carnival.', 1, 1, 1, 1, 240, 282),
-('Forró', 3, 'A close-partner dance from Northeastern Brazil with accordion-driven rhythms.', 2, 2, 1, 1, 360, 300),
-('Frevo', 2, 'An energetic, acrobatic dance performed with colorful umbrellas during Carnival.', 3, 3, 1, 1, 330, 300),
-('Axé', 4, 'A vibrant dance style from Bahia with upbeat moves, popular at parties and festivals.', 4, 4, 1, 1, 318, 348),
-('Bossa Nova', 4, 'A smooth, intimate dance style with subtle sway, paired with jazzy Bossa Nova music.', 5, 1, 1, 1, 270, 360);
+INSERT INTO dances (dance_name, category_id, description, media_id, region, user_id) VALUES
+('Samba', 1, 'A lively, rhythmical dance with origins in Afro-Brazilian communities, performed at the Carnival.', 1, 1, 1),
+('Forró', 3, 'A close-partner dance from Northeastern Brazil with accordion-driven rhythms.', 2, 2, 1),
+('Frevo', 2, 'An energetic, acrobatic dance performed with colorful umbrellas during Carnival.', 3, 3, 1),
+('Axé', 4, 'A vibrant dance style from Bahia with upbeat moves, popular at parties and festivals.', 4, 4, 1),
+('Bossa Nova', 4, 'A smooth, intimate dance style with subtle sway, paired with jazzy Bossa Nova music.', 5, 1, 1);
 
 
 CREATE TABLE IF NOT EXISTS preferences (

@@ -26,7 +26,6 @@ $sql = "
     WHERE dances.dance_name LIKE '%$search%'
        OR region.region_name LIKE '%$search%'
        OR dance_categories.category_name LIKE '%$search%'
-    AND dances.approved = 1
 ";
 
 $result = $conn->query($sql);
