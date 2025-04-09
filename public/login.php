@@ -65,7 +65,7 @@ if (isset($_POST['submit'])) {
     <button type="button" onclick="window.location.href='index.html'" class="back-btn">Back</button>
 
 </div>
-<<!-- Load Bootstrap bundle first -->
+<!-- Load Bootstrap bundle first -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <script>
