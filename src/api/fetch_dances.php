@@ -15,6 +15,7 @@ $filters = json_decode(file_get_contents("php://input"), true);
 $id = isset($filters['id']) ? (int)$filters['id'] : null;
 $region = isset($filters['region']) ? $conn->real_escape_string($filters['region']) : null;
 $category = isset($filters['category']) ? $conn->real_escape_string($filters['category']) : null;
+$approved = isset($filters['approved']) ? (int)$filters['approved'] : null;
 
 // Debugging: Log received data
 error_log("ID: " . ($id ?? "NULL") . " | Region: " . ($region ?? "NULL") . " | Category: " . ($category ?? "NULL"));
@@ -49,6 +50,11 @@ if (!empty($region)) {
 if (!empty($category)) {
     $conditions[] = "dance_categories.category_name = '$category'";
 }
+
+if (!empty($approved)) {
+    $conditions[] = "dances.approved = $approved";
+}
+else ($conditions[] = "dances.approved = 1");
 
 // Append WHERE clause if needed
 if (!empty($conditions)) {
