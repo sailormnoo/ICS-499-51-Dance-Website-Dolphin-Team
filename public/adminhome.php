@@ -8,10 +8,18 @@ if(!isset($_SESSION["admin_name"])) {
 <html>
 <head>
     <title>Admin Page</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- jQuery (needed for DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTables CSS/JS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
 <!-- Toolbar -->
@@ -32,6 +40,7 @@ if(!isset($_SESSION["admin_name"])) {
             <th scope="col">Description</th>
             <th scope="col">Category</th>
             <th scope="col">Region</th>
+            <th scope="col">View</th>
         </tr>
         </thead>
         <tbody>
@@ -40,6 +49,25 @@ if(!isset($_SESSION["admin_name"])) {
     </table>
     <button id="approve-button" class="btn btn-success">Approve Selected</button>
     <button id="delete-button" class="btn btn-danger">Delete Selected</button>
+</div>
+
+<!-- All Dances Section -->
+<div class="container mt-4">
+    <h2>All Dances</h2>
+    <table id="all-dances-table" class="display table table-striped" style="width:100%">
+        <thead>
+        <tr>
+            <th>Dance Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Region</th>
+            <th>View</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- DataTables will load data here via AJAX -->
+        </tbody>
+    </table>
 </div>
 
 <script>
@@ -56,19 +84,17 @@ if(!isset($_SESSION["admin_name"])) {
                 });
             });
 
-        // Function to load dances from fetch_dances.php.
+        // --- Approve/Delete Dances Table Loading ---
         function loadDances() {
             fetch('../src/api/fetch_dances.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({approved: 2})
             })
                 .then(response => response.json())
                 .then(data => {
                     let tbody = document.querySelector('#dances-table tbody');
-                    tbody.innerHTML = ""; // Clear any previous content.
+                    tbody.innerHTML = ""; // Clear previous content.
                     data.forEach(dance => {
                         let row = document.createElement('tr');
 
@@ -101,13 +127,21 @@ if(!isset($_SESSION["admin_name"])) {
                         regionCell.textContent = dance.region;
                         row.appendChild(regionCell);
 
+                        // Link cell.
+                        let linkCell = document.createElement('td');
+                        let viewLink = document.createElement('a');
+                        viewLink.href = 'dancePage.php?danceId=' + dance.dance_id;
+                        viewLink.textContent = 'View';
+                        linkCell.appendChild(viewLink);
+                        row.appendChild(linkCell);
+
                         tbody.appendChild(row);
                     });
                 })
                 .catch(error => console.error('Error fetching dances:', error));
         }
 
-        // Initial load.
+        // Initial load of approval table.
         loadDances();
 
         // Helper to get selected dance IDs.
@@ -131,16 +165,13 @@ if(!isset($_SESSION["admin_name"])) {
             }
             fetch('../src/api/approve_dance.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({danceIds: selectedIds})
             })
                 .then(response => response.json())
                 .then(result => {
                     alert(result.message || result.error);
-                    // Reload the list after action.
-                    loadDances();
+                    loadDances(); // Reload the list after action.
                 })
                 .catch(error => console.error('Error approving dances:', error));
         });
@@ -157,22 +188,52 @@ if(!isset($_SESSION["admin_name"])) {
             }
             fetch('../src/api/disapprove_dance.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({danceIds: selectedIds})
             })
                 .then(response => response.json())
                 .then(result => {
                     alert(result.message || result.error);
-                    // Reload the list after action.
                     loadDances();
                 })
                 .catch(error => console.error('Error deleting dances:', error));
         });
+
+        // --- Initialize DataTable for "All Dances" ---
+        // The DataTable will use AJAX to fetch all dances data.
+        $('#all-dances-table').DataTable({
+            "ajax": {
+                "url": "../src/api/fetch_dances.php",  // Adjust endpoint if necessary.
+                "type": "POST",
+                "contentType": "application/json",
+                "data": function(d) {
+                    return JSON.stringify({});  // Modify data if needed.
+                },
+                "dataSrc": ""
+            },
+            "columns": [
+                { "data": "dance_name" },
+                { "data": "description" },
+                { "data": "category" },
+                { "data": "region" },
+                {
+                    "data": "dance_id",
+                    "render": function(data, type, row, meta) {
+                        return '<a href="dancePage.php?danceId=' + data + '">View</a>';
+                    }
+                }
+            ],
+            "pageLength": 10,
+            "order": [[0, "asc"]],
+            "lengthChange": true,
+            "searching": true,
+            "info": true,
+            "autoWidth": false
+        });
     });
 </script>
 
+<!-- Bootstrap JS (placed at the end for performance) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>
